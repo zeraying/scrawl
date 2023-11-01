@@ -1,0 +1,61 @@
+1.创建爬虫项目    scrapy startproject 项目名称
+                注意：项目名称不能以数字开头，不能包含中文
+2.创建爬虫文件
+                进入spiders文件夹中创建文件
+                scrapy genspider 文件名称 爬取的网址
+                scrapy genspider -t crawl 文件名称 爬取的网址
+                        创建crawl spider文件，在使用crawl spider是注意start_urls需符合allow正则规则否则会漏掉第一页
+3.RoBots.txt   在不百度网址后加上robots.txt，可以查看反扒协议
+                将其注释掉后可不准守该协议，实现爬取
+4.执行爬虫文件    scrapy crawl 文件名
+
+5.项目结构      item         定义数据结构的地方  爬取的数据都包含哪些
+              middlware    中间件  代理
+              piplines     管道   用来处理下载的文件
+              setting      配置文件
+              
+6.xpath       xpath定位标签：
+              last()方法     代表多个相同标签的最后一个标签     //span/ul//li[last()-1]
+
+              last()-1      代表多个相同标签的倒数第二个标签
+
+              @属性查找       标签名[@元素名称='元素值']       //input[@id='kw']
+
+              xpath逻辑表达式-and    标签名[@元素名称='元素值' and @元素名称='元素值']    //input[@id='kw' and @class='s_ipt']
+
+              xpath逻辑表达式-or     标签名[@元素名称='元素值' or @元素名称='元素值']     //input[@id='kw' or @class='s_t']
+
+              not查找      查找year内容不为2005的内容 注：“.”就等于text()      //标签名[not(.='元素值')      //year[not(.=2005)]
+
+              模糊匹配      模糊查询内容包含“更新”的元素     标签名[contains(text(), "内容"]      //div[contains(text(), "更新")]
+
+              精准匹配      标签名[(text()='内容')]        //div[(text()='更新文案')]
+
+              大于小于号定位符  定位到内容大于1336的数据      //div[@class="cell" and text()>'1336']
+
+              轴方式定位      parent::* ：表示当前节点的父节点元素
+                            ancestor::* ：表示当前节点的祖先节点元素
+                            child::* ：表示当前节点的子元素 /A/descendant::* 表示A的所有后代元素
+                            self::* ：表示当前节点的自身元素
+                            ancestor-or-self::* ：表示当前节点的及它的祖先节点元素
+                            descendant-or-self::* ：表示当前节点的及它们的后代元素
+                            following-sibling::* ：表示当前节点的后序所有兄弟节点元素
+                            preceding-sibling::* ：表示当前节点的前面所有兄弟节点元素
+                            following::* ：表示当前节点的后序所有元素
+                            preceding::* ：表示当前节点的所有元素
+7.scrapy shell      scrapy shell + 网址 可对网址在控制台进行进行解析
+                    from scrapy.linkextractors import LinkExtractor     导入链接提取器
+                    allow = ()  正则表达式   提取符合正则的链接
+                            link = LinkExtractor(allow = r'/book/1188_\d+\.html')
+                            \代表数字，代表可以有多个数字
+                    提取链接
+                            link.extract_links(response)
+                    restrict_xpaths = ()   xpath   提取符合xpath规则的链接
+                    restrict_css = ()   提取符合选择器规则的链接
+8.链接数据库      在settings中设置链接参数
+                DB_HOST = '127.0.0.1'
+                DB_PORT = 3306
+                DB_USER = 'root'
+                DB_PASSWORD = '14786995357pzy'
+                DB_NAME = 'scrapy'
+                DB_CHARSET = 'utf-8'
